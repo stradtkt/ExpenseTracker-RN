@@ -4,7 +4,6 @@ import IconButton from '../components/ui/IconButton';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTrashAlt, far  } from '@fortawesome/free-regular-svg-icons';
 import { GlobalStyles } from '../constants/styles';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 import Button from '../components/ui/Button';
 
 const ManageExpense = ({route, navigation}) => {
@@ -15,14 +14,24 @@ const ManageExpense = ({route, navigation}) => {
       title: isEditing ? 'Edit Expense' : 'Add Expense'
     });
   }, [navigation, isEditing]);
-  const deleteExpenseHandler = () => {};
-  const cancelHandler = () => {};
-  const confirmHandler = () => {};
+  
+  const deleteExpenseHandler = () => {
+    navigation.goBack();
+  };
+  
+  const cancelHandler = () => {
+    navigation.goBack();
+  };
+  
+  const confirmHandler = () => {
+    navigation.goBack();
+  };
+  
   return (
     <View style={styles.container}>
       <View style={styles.buttons}>
-        <Button mode='flat' onPress={cancelHandler}>Cancel</Button>
-        <Button onPress={confirmHandler}>{isEditing ? 'Update' : 'Add'}</Button>
+        <Button style={styles.button} mode='flat' onPress={cancelHandler}>Cancel</Button>
+        <Button style={styles.button} onPress={confirmHandler}>{isEditing ? 'Update' : 'Add'}</Button>
       </View>
       {isEditing && (
       <View style={styles.deleteContainer}>
@@ -51,6 +60,10 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center'
+    },
+    button: {
+      minWidth: 120,
+      marginHorizontal: 8
     }
 });
 library.add(far, faTrashAlt);
