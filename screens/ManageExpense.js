@@ -1,12 +1,14 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useContext, useLayoutEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import IconButton from '../components/ui/IconButton';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTrashAlt, far  } from '@fortawesome/free-regular-svg-icons';
 import { GlobalStyles } from '../constants/styles';
 import Button from '../components/ui/Button';
+import { ExpensesContext } from '../store/expenses-context';
 
 const ManageExpense = ({route, navigation}) => {
+  const expensesCtx = useContext(ExpensesContext);
   const editedExpenseId = route.params?.expenseId;
   const isEditing = !!editedExpenseId;
   useLayoutEffect(() => {
@@ -16,6 +18,7 @@ const ManageExpense = ({route, navigation}) => {
   }, [navigation, isEditing]);
   
   const deleteExpenseHandler = () => {
+    expensesCtx.deleteExpense(editedExpenseId);
     navigation.goBack();
   };
   
@@ -24,6 +27,20 @@ const ManageExpense = ({route, navigation}) => {
   };
   
   const confirmHandler = () => {
+    if(isEditing) {
+      expensesCtx.updateExpense(
+        editedExpenseId, {
+          description: 'TESTUPDATE', 
+          amount: 188.99, 
+          date: new Date()
+      });
+    } else {
+      expensesCtx.addExpense({
+        description: 'TEST', 
+        amount: 19.99, 
+        date: new Date()
+      })
+    }
     navigation.goBack();
   };
   

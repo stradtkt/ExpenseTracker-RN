@@ -12,6 +12,7 @@ import { faCalendarDays, far, faPlusSquare } from '@fortawesome/free-regular-svg
 import { faArrowAltCircleLeft } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import IconButton from "./components/ui/IconButton";
+import ExpensesContextProvider from "./store/expenses-context";
 
 
 const Stack = createNativeStackNavigator();
@@ -62,17 +63,19 @@ const App = () => {
   return (
     <>
       <StatusBar/>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{
-          headerStyle: {backgroundColor: GlobalStyles.colors.primary500},
-          headerTintColor: 'white'
-        }}>
-          <Stack.Screen name="ExpensesOverview" component={ExpensesOverview} options={{headerShown: false}}/>
-          <Stack.Screen name='ManageExpense' component={ManageExpense} options={{
-            presentation: 'modal',
-          }}/>
-        </Stack.Navigator>
-      </NavigationContainer>
+      <ExpensesContextProvider>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{
+            headerStyle: {backgroundColor: GlobalStyles.colors.primary500},
+            headerTintColor: 'white'
+          }}>
+            <Stack.Screen name="ExpensesOverview" component={ExpensesOverview} options={{headerShown: false}}/>
+            <Stack.Screen name='ManageExpense' component={ManageExpense} options={{
+              presentation: 'modal',
+            }}/>
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ExpensesContextProvider>
     </>
   );
 };
