@@ -8,9 +8,10 @@ import RecentExpenses from "./screens/RecentExpenses";
 import AllExpenses from "./screens/AllExpenses";
 import { GlobalStyles } from "./constants/styles";
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCalendarDays, far } from '@fortawesome/free-regular-svg-icons';
+import { faCalendarDays, far, faPlusSquare } from '@fortawesome/free-regular-svg-icons';
 import { faArrowAltCircleLeft } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import IconButton from "./components/ui/IconButton";
 
 
 const Stack = createNativeStackNavigator();
@@ -18,13 +19,23 @@ const BottomTabs = createBottomTabNavigator();
 
 const ExpensesOverview = () => {
   return (
-    <BottomTabs.Navigator screenOptions={{
+    <BottomTabs.Navigator screenOptions={({navigation}) => ({
       headerStyle: {backgroundColor: GlobalStyles.colors.primary500},
       headerTintColor: 'white',
       tabBarStyle: {backgroundColor: GlobalStyles.colors.primary500},
       tabBarActiveTintColor: GlobalStyles.colors.accent500,
-      tabBarInactiveTintColor: '#ccc'
-    }}>
+      tabBarInactiveTintColor: '#ccc',
+      headerRight: ({tintColor}) => (
+        <IconButton 
+          icon={faPlusSquare} 
+          size={24} 
+          color={tintColor} 
+          onPress={() => {
+            navigation.navigate('ManageExpense');
+          }} 
+        />
+      )
+  })}>
       <BottomTabs.Screen 
         name="RecentExpenses" 
         component={RecentExpenses} 
@@ -52,9 +63,14 @@ const App = () => {
     <>
       <StatusBar/>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{
+          headerStyle: {backgroundColor: GlobalStyles.colors.primary500},
+          headerTintColor: 'white'
+        }}>
           <Stack.Screen name="ExpensesOverview" component={ExpensesOverview} options={{headerShown: false}}/>
-          <Stack.Screen name='ManageExpense' component={ManageExpense} />
+          <Stack.Screen name='ManageExpense' component={ManageExpense} options={{
+            presentation: 'modal',
+          }}/>
         </Stack.Navigator>
       </NavigationContainer>
     </>
@@ -67,4 +83,5 @@ const styles = StyleSheet.create({
 StatusBar.setBarStyle('light-content', true);
 library.add(far, faArrowAltCircleLeft);
 library.add(far, faCalendarDays);
+library.add(far, faPlusSquare);
 export default App;
