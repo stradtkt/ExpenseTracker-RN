@@ -4,7 +4,6 @@ import IconButton from '../components/ui/IconButton';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTrashAlt, far  } from '@fortawesome/free-regular-svg-icons';
 import { GlobalStyles } from '../constants/styles';
-import Button from '../components/ui/Button';
 import { ExpensesContext } from '../store/expenses-context';
 import ExpenseForm from '../components/ManageExpense/ExpenseForm';
 
@@ -35,13 +34,14 @@ const ManageExpense = ({route, navigation}) => {
     }
     navigation.goBack();
   };
-  
+  const selectedExpense = expensesCtx.expenses.find(expense => expense.id === editedExpenseId);
   return (
     <View style={styles.container}>
       <ExpenseForm 
         submitButtonLabel={isEditing ? 'Update' : 'Add'} 
         onCancel={cancelHandler} 
         onSubmit={confirmHandler}
+        defaultValues={selectedExpense}
       />
       {isEditing && (
       <View style={styles.deleteContainer}>
@@ -64,11 +64,6 @@ const styles = StyleSheet.create({
       paddingTop: 8,
       borderTopWidth: 2,
       borderTopColor: GlobalStyles.colors.primary200,
-      alignItems: 'center'
-    },
-    buttons: {
-      flexDirection: 'row',
-      justifyContent: 'center',
       alignItems: 'center'
     },
 });
