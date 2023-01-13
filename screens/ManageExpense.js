@@ -1,11 +1,12 @@
 import React, { useContext, useLayoutEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TextInput } from 'react-native';
 import IconButton from '../components/ui/IconButton';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTrashAlt, far  } from '@fortawesome/free-regular-svg-icons';
 import { GlobalStyles } from '../constants/styles';
 import Button from '../components/ui/Button';
 import { ExpensesContext } from '../store/expenses-context';
+import ExpenseForm from '../components/ManageExpense/ExpenseForm';
 
 const ManageExpense = ({route, navigation}) => {
   const expensesCtx = useContext(ExpensesContext);
@@ -26,30 +27,22 @@ const ManageExpense = ({route, navigation}) => {
     navigation.goBack();
   };
   
-  const confirmHandler = () => {
+  const confirmHandler = (expenseData) => {
     if(isEditing) {
-      expensesCtx.updateExpense(
-        editedExpenseId, {
-          description: 'TESTUPDATE', 
-          amount: 188.99, 
-          date: new Date()
-      });
+      expensesCtx.updateExpense(editedExpenseId, expenseData);
     } else {
-      expensesCtx.addExpense({
-        description: 'TEST', 
-        amount: 19.99, 
-        date: new Date()
-      })
+      expensesCtx.addExpense(expenseData);
     }
     navigation.goBack();
   };
   
   return (
     <View style={styles.container}>
-      <View style={styles.buttons}>
-        <Button style={styles.button} mode='flat' onPress={cancelHandler}>Cancel</Button>
-        <Button style={styles.button} onPress={confirmHandler}>{isEditing ? 'Update' : 'Add'}</Button>
-      </View>
+      <ExpenseForm 
+        submitButtonLabel={isEditing ? 'Update' : 'Add'} 
+        onCancel={cancelHandler} 
+        onSubmit={confirmHandler}
+      />
       {isEditing && (
       <View style={styles.deleteContainer}>
         <IconButton icon={faTrashAlt} color={GlobalStyles.colors.error500} size={36} onPress={deleteExpenseHandler}/>
@@ -78,10 +71,6 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center'
     },
-    button: {
-      minWidth: 120,
-      marginHorizontal: 8
-    }
 });
 library.add(far, faTrashAlt);
 export default ManageExpense;
